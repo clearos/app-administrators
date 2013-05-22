@@ -71,4 +71,39 @@ class Policy extends Groups
     {
         parent::__construct('administrators', array('administrators_plugin'));
     }
+
+    /**
+     * Edit policy view.
+     *
+     * @param string $policy policy
+     *
+     * @return view
+     */
+
+    function configure($policy)
+    {
+        // Load libraries
+        //---------------
+
+        $this->lang->load('administrators');
+        $this->load->library('base/Access_Control');
+
+        // Load the view data 
+        //------------------- 
+
+        try {
+            // $configuration = $this->dansguardian->get_policy_configuration($policy);
+        } catch (Exception $e) {
+            $this->page->view_exception($e);
+            return;
+        }
+
+        $data['policy'] = $policy;
+        $data['name'] = $configuration['groupname'];
+
+        // Load the views
+        //---------------
+
+        $this->page->view_form('administrators/policy', $data, lang('base_configure_policy'));
+    }
 }
