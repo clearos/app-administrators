@@ -40,10 +40,7 @@ require_once $bootstrap . '/bootstrap.php';
 // D E P E N D E N C I E S
 ///////////////////////////////////////////////////////////////////////////////
 
-if (file_exists(clearos_app_base('policy_manager') . '/controllers/groups.php'))
-    require clearos_app_base('policy_manager') . '/controllers/groups.php';
-else
-    require clearos_app_base('groups') . '/controllers/groups.php';
+require clearos_app_base('policy_manager') . '/controllers/policy_controller.php';
 
 ///////////////////////////////////////////////////////////////////////////////
 // C L A S S
@@ -61,7 +58,7 @@ else
  * @link       http://www.clearfoundation.com/docs/developer/apps/administrators/
  */
 
-class Policy extends Groups
+class Policy extends Policy_Controller
 {
     /**
      * Administrators policy constructor.
@@ -69,7 +66,7 @@ class Policy extends Groups
 
     function __construct()
     {
-        parent::__construct('administrators', array('administrators_plugin'));
+        parent::__construct('administrators');
     }
 
     /**
@@ -86,20 +83,34 @@ class Policy extends Groups
         //---------------
 
         $this->lang->load('administrators');
-        $this->load->library('base/Access_Control');
+        $this->load->library('administrators/Administrators');
+
+        // Handle form submit
+        //-------------------
+
+        if ($this->input->post('submit')) {
+            try {
+                $this->administrators->set_policy($policy, $this->input->post('apps'));
+
+                $this->page->set_status_updated();
+                redirect('/administrators/policy');
+            } catch (Exception $e) {
+                $this->page->view_exception($e);
+                return;
+            }
+        }
 
         // Load the view data 
         //------------------- 
 
         try {
-            // $configuration = $this->dansguardian->get_policy_configuration($policy);
+            $data['policy'] = $policy;
+            $data['all_apps'] = $this->administrators->get_all_apps();
+            $data['apps'] = $this->administrators->get_policy_apps($policy);
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;
         }
-
-        $data['policy'] = $policy;
-        $data['name'] = $configuration['groupname'];
 
         // Load the views
         //---------------

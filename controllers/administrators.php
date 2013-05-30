@@ -73,7 +73,7 @@ class Administrators extends ClearOS_Controller
         // Load views
         //-----------
 
-        $views = array('administrators/settings', 'administrators/policy');
+        $views = array('administrators/policy');
 
         $this->page->view_forms($views, lang('administrators_app_name'));
     }
