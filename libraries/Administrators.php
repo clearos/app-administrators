@@ -104,8 +104,34 @@ class Administrators extends Engine
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        // The code is part of the framework (shared/libraries/Apps)
-        return clearos_get_apps();
+        // In master/slave mode, we want a list of all apps installed
+        // on all the nodes.
+        // FIXME: add if (master)
+
+        if (clearos_app_installed('central_management')) {
+            clearos_load_library('central_management/Device_Manager');
+
+            $device_manager = new \clearos\apps\central_management\Device_Manager();
+            $raw_apps = $device_manager->get_installed_apps();
+        } else {
+            // The code is part of the framework (shared/libraries/Apps)
+            $raw_apps = clearos_get_apps();
+        }
+
+        // Order alphabetically for now
+        //------------------------------
+
+        foreach ($raw_apps as $basename => $details) {
+            $key = $details['category'] . '.' . $details['subcategory'] . '.' . $details['name'];
+            $sorted_keys[$key] = $basename;
+        }
+
+        ksort($sorted_keys);
+
+        foreach ($sorted_keys as $key => $basename)
+            $sorted_apps[$basename] = $raw_apps[$basename];
+
+        return $sorted_apps;
     }
 
     /**
