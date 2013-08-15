@@ -16,7 +16,7 @@ Requires: app-groups
 Requires: app-policy-manager
 
 %description
-With the Administrators app, you can grant access to specific apps to users on the system.
+With the Administrators app, you can grant access to specific apps to groups of users on the system.
 
 %package core
 Summary: Administrators - Core
@@ -27,7 +27,7 @@ Requires: app-accounts-core
 Requires: app-policy-manager-core
 
 %description core
-With the Administrators app, you can grant access to specific apps to users on the system.
+With the Administrators app, you can grant access to specific apps to groups of users on the system.
 
 This package provides the core API and libraries.
 
