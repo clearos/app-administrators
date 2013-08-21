@@ -108,15 +108,19 @@ class Administrators extends Engine
         // on all the nodes.
         // FIXME: add if (master)
 
+/*
         if (clearos_app_installed('central_management')) {
             clearos_load_library('central_management/Device_Manager');
 
             $device_manager = new \clearos\apps\central_management\Device_Manager();
             $raw_apps = $device_manager->get_installed_apps();
         } else {
+*/
             // The code is part of the framework (shared/libraries/Apps)
             $raw_apps = clearos_get_apps();
+/*
         }
+*/
 
         // Order alphabetically for now
         //------------------------------
