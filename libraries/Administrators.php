@@ -53,11 +53,15 @@ clearos_load_language('administrators');
 ///////////////////////////////////////////////////////////////////////////////
 
 use \clearos\apps\base\Engine as Engine;
+use \clearos\apps\mode\Mode_Engine as Mode_Engine;
+use \clearos\apps\mode\Mode_Factory as Mode_Factory;
 use \clearos\apps\policy_manager\Policy as Policy;
 use \clearos\apps\policy_manager\Policy_Manager as Policy_Manager;
 use \clearos\apps\users\User_Factory as User_Factory;
 
 clearos_load_library('base/Engine');
+clearos_load_library('mode/Mode_Engine');
+clearos_load_library('mode/Mode_Factory');
 clearos_load_library('policy_manager/Policy');
 clearos_load_library('policy_manager/Policy_Manager');
 clearos_load_library('users/User_Factory');
@@ -104,28 +108,29 @@ class Administrators extends Engine
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        // In master/slave mode, we want a list of all apps installed
-        // on all the nodes.
-        // FIXME: add if (master)
+        // In master/slave mode, we want a list of all apps installed on all the nodes.
 
-/*
-        if (clearos_app_installed('central_management')) {
+        $mode_object = Mode_Factory::create();
+        $mode = $mode_object->get_mode();
+
+        if (clearos_app_installed('central_management') && $mode === Mode_Engine::MODE_MASTER) {
             clearos_load_library('central_management/Device_Manager');
 
             $device_manager = new \clearos\apps\central_management\Device_Manager();
             $raw_apps = $device_manager->get_installed_apps();
         } else {
-*/
             // The code is part of the framework (shared/libraries/Apps)
             $raw_apps = clearos_get_apps();
-/*
         }
-*/
 
         // Order alphabetically for now
         //------------------------------
 
         foreach ($raw_apps as $basename => $details) {
+            // Skip apps designed for all users (e.g. User Profile, User Certificates)
+            if ($details['user_access'] === TRUE)
+                continue;
+
             $key = $details['category'] . '.' . $details['subcategory'] . '.' . $details['name'];
             $sorted_keys[$key] = $basename;
         }
