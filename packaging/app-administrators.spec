@@ -3,7 +3,7 @@ Name: app-administrators
 Epoch: 1
 Version: 1.5.10
 Release: 1%{dist}
-Summary: Administrators
+Summary: **administrators_app_name**
 License: GPLv3
 Group: ClearOS/Apps
 Source: %{name}-%{version}.tar.gz
@@ -16,10 +16,10 @@ Requires: app-groups
 Requires: app-policy-manager
 
 %description
-With the Administrators app, you can grant access to specific apps to groups of users on the system.
+**administrators_app_description**
 
 %package core
-Summary: Administrators - Core
+Summary: **administrators_app_name** - Core
 License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
@@ -27,7 +27,7 @@ Requires: app-accounts-core
 Requires: app-policy-manager-core
 
 %description core
-With the Administrators app, you can grant access to specific apps to groups of users on the system.
+**administrators_app_description**
 
 This package provides the core API and libraries.
 
