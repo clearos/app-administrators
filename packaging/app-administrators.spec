@@ -1,7 +1,7 @@
 
 Name: app-administrators
 Epoch: 1
-Version: 1.5.1
+Version: 1.5.10
 Release: 1%{dist}
 Summary: Administrators
 License: GPLv3
