@@ -44,3 +44,7 @@ $app['core_requires'] = array(
     'app-accounts-core',
     'app-policy-manager-core',
 );
+
+$app['delete_dependency'] = array(
+    'app-administrators-core',
+);
